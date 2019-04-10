@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+{% block title %} Home {% endblock %}
+
+
+{% block content %}
+    {% if user_profile_view %}
+        <div class="row">
+            <div class="center-block rounded"
+                 style="width:50vw;display:table;padding-bottom: 10px;margin: 10vh auto;background-color:#edffe1;">
+                <h2>صفحه‌ی کاربری</h2>
+
+                <a class="media-left media-bottom" href="/user?{{ username }}">
+                    <img class="icon-align-center"
+                            {% load static %}
+                            {% with  "images/avatars/"|add:username_hash as url %}
+                         src="{% static url %}"
+                            {% endwith %}
+                         width="300"
+                         height="300"
+                    >
+                </a>
+
+                <h4>دریافت توکن ورود به سامانه</h4>
+                <div class="text-danger" id="authentication_key"></div>
+                <button onclick="generate_authentication_key()" class="btn btn-success">دریافت</button>
+                <h3>بارگذاری آواتار</h3>
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <input type="file" name="avatar" id="avatar">
+                    <button class="btn btn-danger" type="submit" value="upload">بارگذاری</button>
+                </form>
+            </div>
+        </div>
+        <script>
+            function generate_authentication_key() {
+                var xhttp;
+                if (window.XMLHttpRequest) {
+                    xhttp = new XMLHttpRequest();
+                } else {
+                    xhttp = new ActiveXObject("Microsoft.XMLHTTP");
+                }
+                xhttp.onreadystatechange = function () {
+                    if (this.readyState === 4 && this.status === 200) {
+                        var auth_key = JSON.parse(this.responseText);
+                        document.getElementById("authentication_key").innerHTML = 'توکن دریافت شده: ' + auth_key.authentication_key;
+                    }
+                };
+                xhttp.open("GET", "{% url 'auth_v2' %}", true);
+                xhttp.send();
+            }
+        </script>
+    {% elif tweets %}
+        {% load datetounix %}
+        {% for tweet in tweets %}
+            <div class="container center-block rounded"
+                 style="text-align: right;width:80vw;display:table;padding: 10px;margin: 10vh auto;background-color:#edffe1;">
+                <div class="media">
+                    <a class="media-left media-bottom" href="/user?{{ tweet.username }}">
+                        <img class="pull-left"
+                                {% load static %}
+                                {% with  "images/avatars/"|add:tweet.username_hash as url %}
+                             src="{% static url %}"
+                                {% endwith %}
+                             width="50"
+                             height="50"
+                        >
+                    </a>
+                    <div class="media-body">
+                        <h4 class="media-heading">{{ tweet.title }}</h4>
+                        <p>
+                            {{ tweet.body }}
+                        </p>
+                        <p style="color: #2b542c; font-size: 12px">
+                            ارسال شده توسط {{ tweet.username }} در تاریخ
+                            <script>
+                                document.write(getDate({{ tweet.date|epoch }}));
+                            </script>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    {% endif %}
+{% endblock %}

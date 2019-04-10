@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% block title %} خانه {% endblock %}
+
+
+{% block content %}
+    {% if user.is_authenticated %}
+        {% if tweets %}
+            {% load datetounix %}
+            {% for tweet in tweets %}
+                <div class="container center-block rounded"
+                     style="text-align: right;width:80vw;display:table;padding: 10px;margin: 10vh auto;background-color:#edffe1;">
+                    <div class="media">
+                        <a class="media-left media-bottom" href="/user?{{ tweet.username }}">
+                            <img class="pull-left"
+                                    {% load static %}
+                                    {% with  "images/avatars/"|add:tweet.username_hash as url %}
+                                 src="{% static url %}"
+                                    {% endwith %}
+                                 width="50"
+                                 height="50"
+                            >
+                        </a>
+                        <div class="media-body">
+                            <h4 class="media-heading">{{ tweet.title }}</h4>
+                            <p>
+                                {{ tweet.body }}
+                            </p>
+                            <p style="color: #2b542c; font-size: 12px">
+                                ارسال شده توسط {{ tweet.username }} در تاریخ
+                                <script>
+                                    document.write(getDate({{ tweet.date|epoch }}));
+                                </script>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+
+        {% endif %}
+    {% else %}
+        <div class="row">
+        <div class="center-block rounded" style="width:50vw;display:table;padding: 10px;margin: 10vh auto;background-color:#edffe1;">
+            <h2>دیوار</h2>
+            <p style="text-align: right">دیوار، محلی است برای جستجوی کالا، مسکن و خدمات متنوع و ارائه‌ی آن‌ها.</p>
+            <p style="text-align: right">این برنامه توسعه داده شده است تا کاربران یا شرکت‌ها بتوانند به‌راحتی کالا یا خدمات خود را ارائه دهند.</p>
+            <a class="btn btn-success" href="{% url 'login' %}"> ورود به برنامه</a>
+            <p></p>
+            <a class="btn btn-primary" href="{% url 'signup' %}">ثبت نام</a>
+        </div>
+    </div>
+    {% endif %}
+{% endblock %}
