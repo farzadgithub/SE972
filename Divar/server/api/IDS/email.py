@@ -3,8 +3,15 @@ from smtplib import SMTPAuthenticationError
 from django.core.mail import EmailMessage
 
 
-EMAIL_MESSAGES = {'success': 'با سلام. یک ورود موفق به سامانه server داشتید.',
-                  'failure': 'با سلام. یک ورود ناموفق به سامانه server داشتید.'}
+EMAIL_MESSAGES = {'success 1': '1',
+                  'success 2': '2',
+                  'success 3': '2',
+                  'success 4': '2',
+                  'failure 1': '1',
+                  'failure 2': '1',
+                  'failure 3': '1',
+                  'failure 4': '1',
+                  }
 
 
 def send_email(email, title):

@@ -28,13 +28,13 @@ def login_attempt(request, request_detail, response):
                         user = dj_auth.authenticate(username=username, password=password)
                         if user is not None:
                             dj_auth.login(request, user)
-                            send_email(user.email, 'success')
+                            send_email(user.email, 'success 2')
                             login_attempts.filter(ip=request_detail.ip, user=username).update(failed_attempts=0)
                             return True, True, response
                     fail = login_attempts.filter(ip=request_detail.ip, user=username)
                     try:
                         email = User.objects.filter(username=username).values('email')[0]['email']
-                        send_email(email, 'failure')
+                        send_email(email, 'failure 1')
                     except Exception:
                         print('oh 1')
                     if fail:
@@ -56,13 +56,13 @@ def login_attempt(request, request_detail, response):
                     user = dj_auth.authenticate(username=username, password=password)
                     if user is not None:
                         dj_auth.login(request, user)
-                        send_email(user.email, 'success')
+                        send_email(user.email, 'success 3')
                         login_attempts.filter(ip=request_detail.ip, user=username).update(failed_attempts=0)
                         return True, True, response
                     fail = login_attempts.filter(ip=request_detail.ip, user=username)
                     try:
                         email = User.objects.filter(username=username).values('email')[0]['email']
-                        send_email(email, 'failure')
+                        send_email(email, 'failure 2')
                     except Exception:
                         print('oh 2')
                     if fail:
@@ -75,7 +75,7 @@ def login_attempt(request, request_detail, response):
                     fail = login_attempts.filter(ip=request_detail.ip, user=username)
                     try:
                         email = User.objects.filter(username=username).values('email')[0]['email']
-                        send_email(email, 'failure')
+                        send_email(email, 'failure 3')
                     except Exception:
                         print('oh 3')
 

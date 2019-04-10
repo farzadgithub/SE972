@@ -33,7 +33,7 @@ def login(request):
         fail = login_attempts.filter(ip=request_detail.ip, user=username)
         try:
             email = User.objects.filter(username=username).values('email')[0]['email']
-            send_email(email, 'failure')
+            send_email(email, 'failure 4')
         except Exception:
             print('oh')
         if fail:

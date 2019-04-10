@@ -17,7 +17,7 @@ def login(request):
             user = dj_auth.authenticate(username=username, password=password)
             if user is not None:
                 dj_auth.login(request, user)
-                send_email(user.email, 'success')
+                send_email(user.email, 'success 1')
                 return HttpResponseRedirect('/')
     else:
         f = LoginForm()
