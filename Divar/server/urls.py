@@ -18,5 +18,5 @@ urlpatterns = [
 
     path('auth/', include('social_django.urls', namespace='social')),  # <- Here
 
-path('ajax/load-subcategories/', load_subcategories, name='ajax_load_subcategories'),
+    path('ajax/load-subcategories/', load_subcategories, name='ajax_load_subcategories'),
 ]

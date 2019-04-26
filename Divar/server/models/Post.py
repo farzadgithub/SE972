@@ -2,9 +2,7 @@ import datetime
 from django.db import models
 from django import forms
 
-from server.models.Brand import Brand
 from server.models.Category import Category, Subcategory
-from server.models.Product import Product
 
 
 class Post(models.Model):
@@ -17,8 +15,6 @@ class Post(models.Model):
     title = models.CharField(max_length=30)
 
     price = models.PositiveIntegerField()
-    brand = models.ForeignKey(Brand, on_delete=models.SET_NULL, null=True)
-    product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True)
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True)
     subcategory = models.ForeignKey(Subcategory, on_delete=models.SET_NULL, null=True)
 
