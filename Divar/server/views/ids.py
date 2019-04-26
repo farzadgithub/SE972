@@ -78,7 +78,7 @@ def IDS_v1(request_detail):
     return is_ids
 
 
-EXEMPT_URLS = [re.compile(r'^login$'), re.compile(r'^api/v1/tweet$'), re.compile(r'^api/v1/tweet$')]
+EXEMPT_URLS = [re.compile(r'^login$')]
 
 
 def IDS_v2(request, request_detail):

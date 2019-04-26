@@ -1,7 +1,7 @@
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.core.files.storage import FileSystemStorage
-from server.models.Tweet import Tweet
+from server.models.Post import Post
 import hashlib
 import os
 
@@ -16,7 +16,7 @@ def user(request):
         username_hash = '7d97481b1fe66f4b51db90da7e794d9f'
     else:
         username_hash = hashlib.md5(username.encode('utf-8')).hexdigest()
-    tweets = None
+    posts = None
     try:
         if request.method == "POST" and request.FILES['avatar']:
             avatar = request.FILES['avatar']
@@ -27,16 +27,16 @@ def user(request):
             return redirect('/user/')
         elif request.method == "GET" and request.path.startswith('/user/') and request.GET:
             for key, value in request.GET.items():
-                tweets = Tweet.objects.filter(username=key).order_by('-date')
-                for x in tweets:
+                posts = Post.objects.filter(username=key).order_by('-date')
+                for x in posts:
                     if not os.path.isfile('server/static/images/avatars/' + x.username_hash):
                         x.username_hash = '7d97481b1fe66f4b51db90da7e794d9f'
-                if not tweets:
-                    raise Exception('No tweets to show')
+                if not posts:
+                    raise Exception('No posts to show')
         else:
             user_profile_view = True
     except Exception:
         user_profile_view = True
     return render(request, 'user.html',
-                  {'user_profile_view': user_profile_view, 'tweets': tweets, 'username_hash': username_hash,
+                  {'user_profile_view': user_profile_view, 'posts': posts, 'username_hash': username_hash,
                    'username': username})

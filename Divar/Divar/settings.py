@@ -161,3 +161,5 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = 'irobotisreal@gmail.com'
 EMAIL_HOST_PASSWORD = ':))'
 EMAIL_PORT = 587
+
+GEOIP_PATH = os.path.dirname(os.path.realpath(__file__)) + '/../server/geoip'

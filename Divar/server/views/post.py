@@ -1,14 +1,14 @@
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
-from server.models.Tweet import TweetForm
+from server.models.Post import PostForm
 import hashlib
 
 
-def tweet(request):
+def post(request):
     if not request.user.is_authenticated:
         return HttpResponseRedirect('/')
     elif request.method == "POST":
-        f = TweetForm(request.POST)
+        f = PostForm(request.POST)
         if f.is_valid():
             f = f.save(commit=False)
             f.hashtags = hashtag_extractor(f.body)
@@ -17,8 +17,8 @@ def tweet(request):
             f.save()
             return redirect('/')
     else:
-        f = TweetForm()
-    return render(request, 'tweet.html', {'form': f})
+        f = PostForm()
+    return render(request, 'post.html', {'form': f})
 
 
 def hashtag_extractor(text):

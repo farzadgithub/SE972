@@ -49,16 +49,16 @@
                 xhttp.send();
             }
         </script>
-    {% elif tweets %}
+    {% elif posts %}
         {% load datetounix %}
-        {% for tweet in tweets %}
+        {% for post in posts %}
             <div class="container center-block rounded"
                  style="text-align: right;width:80vw;display:table;padding: 10px;margin: 10vh auto;background-color:#edffe1;">
                 <div class="media">
-                    <a class="media-left media-bottom" href="/user?{{ tweet.username }}">
+                    <a class="media-left media-bottom" href="/user?{{ post.username }}">
                         <img class="pull-left"
                                 {% load static %}
-                                {% with  "images/avatars/"|add:tweet.username_hash as url %}
+                                {% with  "images/avatars/"|add:post.username_hash as url %}
                              src="{% static url %}"
                                 {% endwith %}
                              width="50"
@@ -66,14 +66,14 @@
                         >
                     </a>
                     <div class="media-body">
-                        <h4 class="media-heading">{{ tweet.title }}</h4>
+                        <h4 class="media-heading">{{ post.title }}</h4>
                         <p>
-                            {{ tweet.body }}
+                            {{ post.body }}
                         </p>
                         <p style="color: #2b542c; font-size: 12px">
-                            ارسال شده توسط {{ tweet.username }} در تاریخ
+                            ارسال شده توسط {{ post.username }} در تاریخ
                             <script>
-                                document.write(getDate({{ tweet.date|epoch }}));
+                                document.write(getDate({{ post.date|epoch }}));
                             </script>
                         </p>
                     </div>

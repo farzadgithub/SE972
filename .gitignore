@@ -1,0 +1,17 @@
+# Created by .ignore support plugin (hsz.mobi)
+.gitignore
+.idea/dataSources.local.xml
+.idea/dataSources/
+.idea/inspectionProfiles/
+.idea/workspace.xml
+Divar/Divar/__pycache__/
+Divar/requirements.txt
+Divar/server/__pycache__/
+Divar/server/api/IDS/__pycache__/
+Divar/server/api/captcha/__pycache__/
+Divar/server/api/v1/__pycache__/
+Divar/server/api/v2/__pycache__/
+Divar/server/migrations/__pycache__/
+Divar/server/models/__pycache__/
+Divar/server/templatetags/__pycache__/
+Divar/server/views/__pycache__/

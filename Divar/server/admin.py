@@ -1,10 +1,10 @@
 from django.contrib import admin
 
 # Register your models here.
-from server.models import Userprofile, Tweet, RequestDetail, BlockedIP, Captcha, LoginAttempts
+from server.models import Userprofile, Post, RequestDetail, BlockedIP, Captcha, LoginAttempts
 
 admin.site.register(Userprofile)
-admin.site.register(Tweet)
+admin.site.register(Post)
 admin.site.register(BlockedIP)
 admin.site.register(Captcha)
 admin.site.register(LoginAttempts)
