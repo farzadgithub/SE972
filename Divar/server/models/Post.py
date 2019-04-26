@@ -28,23 +28,28 @@ class Post(models.Model):
 
 
 class PostForm(forms.ModelForm):
-    title = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'عنوان توییت'}),
-                            label='عنوان توییت',
+    title = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'عنوان آگهی'}),
+                            label='عنوان آگهی',
                             required=True,
                             disabled=False,
                             help_text='')
-    body = forms.CharField(widget=forms.Textarea(attrs={'placeholder': 'متن توییت'}),
-                           label='متن توییت',
+    body = forms.CharField(widget=forms.Textarea(attrs={'placeholder': 'متن آگهی'}),
+                           label='متن آگهی',
                            required=True,
                            disabled=False,
                            help_text='')
-    hashtags = None
+    search_keywords = None
     username = None
     username_hash = '7d97481b1fe66f4b51db90da7e794d9x'
 
     class Meta:
         model = Post
-        exclude = ('username', 'hashtags', 'date', 'username_hash')
+        fields = ('title', 'body', 'category', 'subcategory')
+        labels = {
+            'subcategory': 'زیردسته',
+            'category': 'دسته‌بندی',
+        }
+        # exclude = ('username', 'search_keywords', 'date', 'username_hash')
 
     def is_valid(self):
         self.full_clean()

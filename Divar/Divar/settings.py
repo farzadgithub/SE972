@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'server.apps.ServerConfig',
     'rest_framework',
+    'django_google_maps',
     'social_django'
 ]
 

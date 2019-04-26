@@ -3,14 +3,36 @@
 
 
 {% block content %}
-<div class="row">
-        <div class="center-block rounded" style="width:50vw;display:table;padding: 10px;margin: 10vh auto;background-color:#edffe1;">
+    <div class="row">
+        <div class="center-block rounded"
+             style="width:50vw;display:table;padding: 10px;margin: 10vh auto;background-color:#edffe1;">
             <h2>ایجاد آگهی</h2>
-            <form method="post">
+            <form method="post" id="new_post" data-subcategories-url="{% url 'ajax_load_subcategories' %}">
                 {% csrf_token %}
                 {{ form.as_p }}
                 <button type="submit">ثبت آگهی</button>
             </form>
         </div>
     </div>
+
+
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script>
+        $("#id_category").change(function () {
+            var url = $("#new_post").attr("data-subcategories-url");  // get the url of the `load_cities` view
+            var categoryId = $(this).val();  // get the selected country ID from the HTML input
+            $.ajax({                       // initialize an AJAX request
+                url: url,                    // set the url of the request (= localhost:8000/hr/ajax/load-cities/)
+                data: {
+                    'category': categoryId       // add the country id to the GET parameters
+                },
+                success: function (data) {   // `data` is the return of the `load_cities` view function
+                    $("#id_subcategory").html(data);  // replace the contents of the city input with the data that came from the server
+                }
+            });
+
+
+        });
+    </script>
 {% endblock %}
