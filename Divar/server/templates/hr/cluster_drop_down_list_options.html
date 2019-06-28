@@ -1,0 +1,4 @@
+<option value="">---------</option>
+{% for cluster in clusters %}
+<option value="{{ cluster.pk }}">{{ cluster.name }}</option>
+{% endfor %}

@@ -41,7 +41,9 @@ INSTALLED_APPS = [
     'server.apps.ServerConfig',
     'rest_framework',
     'django_google_maps',
-    'social_django'
+    # 'osm_field',
+    'social_django',
+    # 'django.contrib.gis',
 ]
 
 MIDDLEWARE = [
@@ -152,7 +154,7 @@ LOGIN_URL = 'login'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '427862687047-kg82c3hlb0ea8qm8nmtvfpepm1m1pmu8.apps.googleusercontent.com'  # Paste CLient Key
-SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'EAC6ukILyrc01-zejbsSZw2K'  # Paste Secret Key
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = ':))'  # Paste Secret Key
 
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
@@ -164,3 +166,7 @@ EMAIL_HOST_PASSWORD = ':))'
 EMAIL_PORT = 587
 
 GEOIP_PATH = os.path.dirname(os.path.realpath(__file__)) + '/../server/geoip'
+
+GOOGLE_MAPS_API_KEY = ''
+
+# GDAL_LIBRARY_PATH = 'C:/Program Files/GDAL/'

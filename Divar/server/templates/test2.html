@@ -1,0 +1,42 @@
+{% load static from staticfiles %}<!DOCTYPE HTML>
+<html>
+<head>
+    <title></title>
+    <!-- Either serve jQuery yourself -->
+    <script type="text/javascript" src="{% static "js/vendor/jquery-2.1.0.min.js" %}"></script>
+    <!-- or from a CDN -->
+    <script type="text/javascript" src="//code.jquery.com/jquery-2.1.0.min.js"></script>
+</head>
+<body>
+{{ form.media }}
+<form action="" method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+
+    <div id="mapid" style="width: 600px; height: 400px;"></div>
+    <script>
+
+        function onMapClick(e) {
+            marker.setLatLng(e.latlng);
+            {#console.log(e);#}
+
+            document.getElementById('id_location_lat').value = e.latlng.lat;
+            document.getElementById('id_location_lon').value = e.latlng.lng;
+        }
+
+        var mymap = L.map('mapid').setView([35.7, 51.4], 13);
+
+        L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 18,
+            attribution: 'KING &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a>',
+            id: 'osm.streets'
+        }).addTo(mymap);
+
+        var marker = L.marker([35.7, 51.4]).addTo(mymap);
+        mymap.on('click', onMapClick);
+
+    </script>
+    <input type="submit" value="Save"/>
+</form>
+</body>
+</html>

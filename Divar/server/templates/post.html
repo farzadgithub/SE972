@@ -1,29 +1,119 @@
 {% extends 'base.html' %}
+{% load static from staticfiles %}
 {% block title %} ایجاد آگهی {% endblock %}
 
 
 {% block content %}
+    <!-- Either serve jQuery yourself -->
+    <script type="text/javascript" src="{% static "js/vendor/jquery-2.1.0.min.js" %}"></script>
+    <!-- or from a CDN -->
+    <script type="text/javascript" src="//code.jquery.com/jquery-2.1.0.min.js"></script>
+    <script src="{% static 'js/vendor/leaflet.js' %}"></script>
+    {#    <script src="{% static 'js/vendor/osm_field.js' %}"></script>#}
+    <link rel="stylesheet" href="{% static 'css/vendor/leaflet.css' %}"/>
+    <link rel="stylesheet" href="{% static 'css/osm_field.css' %}"/>
+
+    {{ form.media }}
     <div class="row">
         <div class="center-block rounded"
              style="width:50vw;display:table;padding: 10px;margin: 10vh auto;background-color:#edffe1;">
-            <h2>ایجاد آگهی</h2>
-            <form method="post" id="new_post" data-subcategories-url="{% url 'ajax_load_subcategories' %}">
+            <h1>ایجاد آگهی</h1>
+            <form method="post" id="new_post" data-subcategories-url="{% url 'ajax_load_subcategories' %}"
+                  data-cluster-url="{% url 'ajax_load_cluster' %}">
                 {% csrf_token %}
+                <h2>کجا هستید؟</h2>
+                <div id="id_map" style="width: 600px; height: 400px;"></div>
+                <div id="id_location_selected"></div>
                 {{ form.as_p }}
-                <button type="submit">ثبت آگهی</button>
+                <button type="submit" class="btn btn-success">ایجاد آگهی</button>
             </form>
         </div>
     </div>
 
-
-
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script>
-        $("#id_category").change(function () {
-            var url = $("#new_post").attr("data-subcategories-url");  // get the url of the `load_cities` view
-            var categoryId = $(this).val();  // get the selected country ID from the HTML input
+        function onMapClick(e) {
+            marker.setLatLng(e.latlng);
+            var lat = e.latlng.lat;
+            var lng = e.latlng.lng;
+            var neighbourhood = '';
+
             $.ajax({                       // initialize an AJAX request
-                url: url,                    // set the url of the request (= localhost:8000/hr/ajax/load-cities/)
+                url: "https://nominatim.openstreetmap.org/reverse",// set the url of the request (= localhost:8000/hr/ajax/load-cities/)
+                data: {
+                    'format': 'json',// add the country id to the GET parametersm
+                    'lat': lat,
+                    'lon': lng
+                },
+                success: function (data) {   // `data` is the return of the `load_cities` view function
+                    console.log(data);
+                    var json_data = JSON.parse(data);
+                    console.log(json_data);
+                    {#var $xml = $(data);#}
+                    {#neighbourhood = $xml.find('neighbourhood').text();#}
+                    {#console.log(neighbourhood);#}
+                    {#set_location(neighbourhood);#}
+                    {#$("#id_location").val(neighbourhood);  // replace the contents of the city input with the data that came from the server#}
+                }
+            });
+
+            document.getElementById('id_location_lat').value = lat;
+            document.getElementById('id_location_lon').value = lng;
+        }
+
+        function translate_location(location_neighbourhood) {
+            $.ajax({                       // initialize an AJAX request
+                url: "https://inputtools.google.com/request",// set the url of the request (= localhost:8000/hr/ajax/load-cities/)
+                data: {
+                    'text': location_neighbourhood,// add the country id to the GET parametersm
+                    'itc': 'fa-t-i0-und',
+                    'num': 1,
+                    'ie': 'utf-8',
+                    'oe': 'utf-8'
+                },
+
+                success: function (data) {   // `data` is the return of the `load_cities` view function
+                    var fa_neighbour = data[1][0][1][0];
+                    var text_to_show = "شما منطقه‌ی <strong>" + fa_neighbour + "</strong> را انتخاب کرده‌اید."
+                    var class_to_show = "alert alert-success offset4 span4";
+                    $("#id_location_selected").addClass(class_to_show);  // replace the contents of the city input with the data that came from the server
+                    $("#id_location_selected").html(text_to_show);  // replace the contents of the city input with the data that came from the server
+                },
+                error: function () {
+
+                }
+
+            });
+        }
+
+        function set_location(location_neighbourhood) {
+            var text_to_show = "شما منطقه‌ی <strong>" + location_neighbourhood + "</strong> را انتخاب کرده‌اید.";
+            var class_to_show = "alert alert-success offset4 span4";
+            document.getElementById('id_location_selected').classList.add(class_to_show);
+            document.getElementById('id_location_selected').innerHTML = text_to_show;
+        }
+
+        var id_map = L.map('id_map').setView([35.7, 51.4], 13);
+
+        L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 18,
+            attribution: 'KING &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a>',
+            id: 'osm.streets'
+        }).addTo(id_map);
+
+        var marker = L.marker([35.7, 51.4]).addTo(id_map);
+        id_map.on('click', onMapClick);
+
+    </script>
+
+    <script>
+        $("#id_category").change(function () {
+            var url_subcategory = $("#new_post").attr("data-subcategories-url");  // get the url of the `load_cities` view
+            var url_cluster = $("#new_post").attr("data-cluster-url");  // get the url of the `load_cities` view
+            var categoryId = $(this).val();  // get the selected country ID from the HTML input
+            var subcategoryId = 0;
+            $.ajax({                       // initialize an AJAX request
+                url: url_subcategory,                    // set the url of the request (= localhost:8000/hr/ajax/load-cities/)
                 data: {
                     'category': categoryId       // add the country id to the GET parameters
                 },
@@ -31,8 +121,33 @@
                     $("#id_subcategory").html(data);  // replace the contents of the city input with the data that came from the server
                 }
             });
+            $.ajax({                       // initialize an AJAX request
+                url: url_cluster,                    // set the url of the request (= localhost:8000/hr/ajax/load-cities/)
+                data: {
+                    'category': categoryId,       // add the country id to the GET parameters
+                    'subcategory': subcategoryId       // add the country id to the GET parameters
+                },
+                success: function (data) {   // `data` is the return of the `load_cities` view function
+                    $("#id_cluster").html(data);  // replace the contents of the city input with the data that came from the server
+                }
+            });
 
+        });
 
+        $("#id_subcategory").change(function () {
+            var url = $("#new_post").attr("data-cluster-url");  // get the url of the `load_cities` view
+            var categoryId = $("#id_category").val();
+            var subcategoryId = $(this).val();  // get the selected country ID from the HTML input
+            $.ajax({                       // initialize an AJAX request
+                url: url,                    // set the url of the request (= localhost:8000/hr/ajax/load-cities/)
+                data: {
+                    'category': categoryId,       // add the country id to the GET parameters
+                    'subcategory': subcategoryId       // add the country id to the GET parameters
+                },
+                success: function (data) {   // `data` is the return of the `load_cities` view function
+                    $("#id_cluster").html(data);  // replace the contents of the city input with the data that came from the server
+                }
+            });
         });
     </script>
 {% endblock %}
